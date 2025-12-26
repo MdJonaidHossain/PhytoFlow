@@ -287,10 +287,8 @@ class StemGeometry:
         
         mesh = trimesh.Trimesh(vertices=np.array(vertices), faces=np.array(faces))
         
-        # Ensure mesh is valid
-        mesh.remove_degenerate_faces()
-        mesh.remove_duplicate_faces()
-        mesh.remove_unreferenced_vertices()
+        # Ensure mesh is valid (use process=True to clean)
+        mesh = mesh.process(validate=True)
         
         return mesh
     

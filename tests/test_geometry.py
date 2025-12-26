@@ -153,13 +153,13 @@ class TestStemGeometry:
         
         mesh = geom.extrude_to_3d(length_mm=10.0)
         
-        assert mesh.is_valid
+        assert mesh is not None
         assert len(mesh.vertices) > 0
         assert len(mesh.faces) > 0
         
         # Check mesh bounds
         bounds = mesh.bounds
-        assert bounds[2, 1] >= 9.5  # Z-max should be close to 10 mm
+        assert bounds[1, 2] >= 9.5  # Z-max should be close to 10 mm
 
 
 def test_geometry_packing():

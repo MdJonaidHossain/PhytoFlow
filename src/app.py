@@ -11,24 +11,59 @@ import json
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-# Import PhytoFlow modules
-from parameters import ParameterValidator, MoleculeManager
-from geometry import StemGeometry
-from simulation import PhytoFlowSolver, MoleculeLibrary, LiteratureValidator
-from visualization import PhytoFlowVisualizer
-from explanations import BiologicalExplainer
-from optimization import DesignOptimizer
-from image_to_geom import ImageToGeometry
-from pinn import get_pinn_info
-from gnn import get_gnn_info
-
-# Page config
+# Page config (must be first Streamlit command)
 st.set_page_config(
     page_title="PhytoFlow - Plant Vascular Transport Simulator",
     page_icon="🌿",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Show loading message while modules load
+with st.spinner('⚙️ Loading PhytoFlow modules...'):
+    # Lazy imports - only import when needed to speed up initial load
+    @st.cache_resource
+    def load_modules():
+        """Lazy load heavy modules only when needed."""
+        from parameters import ParameterValidator, MoleculeManager
+        from geometry import StemGeometry
+        from simulation import PhytoFlowSolver, MoleculeLibrary, LiteratureValidator
+        from visualization import PhytoFlowVisualizer
+        from explanations import BiologicalExplainer
+        from optimization import DesignOptimizer
+        from image_to_geom import ImageToGeometry
+        from pinn import get_pinn_info
+        from gnn import get_gnn_info
+        
+        return {
+            'ParameterValidator': ParameterValidator,
+            'MoleculeManager': MoleculeManager,
+            'StemGeometry': StemGeometry,
+            'PhytoFlowSolver': PhytoFlowSolver,
+            'MoleculeLibrary': MoleculeLibrary,
+            'LiteratureValidator': LiteratureValidator,
+            'PhytoFlowVisualizer': PhytoFlowVisualizer,
+            'BiologicalExplainer': BiologicalExplainer,
+            'DesignOptimizer': DesignOptimizer,
+            'ImageToGeometry': ImageToGeometry,
+            'get_pinn_info': get_pinn_info,
+            'get_gnn_info': get_gnn_info,
+        }
+
+    # Load modules with caching for faster subsequent runs
+    modules = load_modules()
+    ParameterValidator = modules['ParameterValidator']
+    MoleculeManager = modules['MoleculeManager']
+    StemGeometry = modules['StemGeometry']
+    PhytoFlowSolver = modules['PhytoFlowSolver']
+    MoleculeLibrary = modules['MoleculeLibrary']
+    LiteratureValidator = modules['LiteratureValidator']
+    PhytoFlowVisualizer = modules['PhytoFlowVisualizer']
+    BiologicalExplainer = modules['BiologicalExplainer']
+    DesignOptimizer = modules['DesignOptimizer']
+    ImageToGeometry = modules['ImageToGeometry']
+    get_pinn_info = modules['get_pinn_info']
+    get_gnn_info = modules['get_gnn_info']
 
 # Custom CSS
 st.markdown("""
@@ -66,8 +101,13 @@ st.markdown('<div class="sub-header">Biophysics Engine for Plant Vascular Transp
 # Sidebar
 st.sidebar.title("⚙️ Controls")
 
-# Species preset
-validator = ParameterValidator("data/species_profiles.json")
+# Cache the validator and species data to avoid reloading on every interaction
+@st.cache_resource
+def get_validator():
+    """Cache the parameter validator to avoid reloading species profiles."""
+    return ParameterValidator("data/species_profiles.json")
+
+validator = get_validator()
 species_list = validator.get_species_list()
 species_names = {
     'arabidopsis': 'Arabidopsis (Model Plant)',

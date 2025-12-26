@@ -1,13 +1,34 @@
 """Geometry generation: parametric, AI image-based, and 3D export for PhytoFlow."""
 
 import numpy as np
-from shapely.geometry import Point, Polygon
-from shapely.ops import unary_union
-import trimesh
 from typing import List, Dict, Tuple, Optional
-import cv2
-from skimage import filters, measure, morphology
-from scipy.spatial import Voronoi
+
+# Lazy imports for heavy dependencies - only load when needed
+def _import_shapely():
+    """Lazy import shapely (only needed for polygon operations)."""
+    from shapely.geometry import Point, Polygon
+    from shapely.ops import unary_union
+    return Point, Polygon, unary_union
+
+def _import_trimesh():
+    """Lazy import trimesh (only needed for 3D export)."""
+    import trimesh
+    return trimesh
+
+def _import_cv2():
+    """Lazy import cv2 (only needed for image processing)."""
+    import cv2
+    return cv2
+
+def _import_skimage():
+    """Lazy import scikit-image (only needed for image processing)."""
+    from skimage import filters, measure, morphology
+    return filters, measure, morphology
+
+def _import_scipy_spatial():
+    """Lazy import scipy.spatial (only needed for Voronoi)."""
+    from scipy.spatial import Voronoi
+    return Voronoi
 
 
 class VascularBundle:
@@ -121,6 +142,10 @@ class StemGeometry:
             threshold_method: 'otsu', 'adaptive', or 'manual'
             min_area_pixels: Minimum area to consider as a bundle
         """
+        # Lazy load heavy dependencies
+        cv2 = _import_cv2()
+        filters, measure, morphology = _import_skimage()
+        
         # Load image
         img = cv2.imread(image_path)
         if img is None:
@@ -205,13 +230,16 @@ class StemGeometry:
         
         return data
     
-    def to_shapely_polygons(self) -> Tuple[Polygon, List[Polygon], List[Polygon]]:
+    def to_shapely_polygons(self) -> Tuple:
         """
         Convert geometry to Shapely polygons for export and computation.
         
         Returns:
             (stem_polygon, xylem_polygons, phloem_polygons)
         """
+        # Lazy load shapely
+        Point, Polygon, unary_union = _import_shapely()
+        
         # Stem outline
         stem = Point(0, 0).buffer(self.stem_radius_mm)
         
@@ -229,7 +257,7 @@ class StemGeometry:
         
         return stem, xylem_polygons, phloem_polygons
     
-    def extrude_to_3d(self, length_mm: float = 10.0, resolution: int = 32) -> trimesh.Trimesh:
+    def extrude_to_3d(self, length_mm: float = 10.0, resolution: int = 32):
         """
         Extrude 2D cross-section to 3D mesh for STL/OBJ export.
         
@@ -240,6 +268,9 @@ class StemGeometry:
         Returns:
             Trimesh object ready for export
         """
+        # Lazy load trimesh
+        trimesh = _import_trimesh()
+        
         stem, xylem_polygons, phloem_polygons = self.to_shapely_polygons()
         
         # Create 2D path from stem outline

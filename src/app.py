@@ -107,7 +107,7 @@ st.sidebar.subheader("📐 Geometry Parameters")
 stem_radius = st.sidebar.slider(
     "Stem Radius (mm)",
     min_value=0.3, max_value=8.0,
-    value=default_params.get('stem_radius_mm', 1.0),
+    value=float(default_params.get('stem_radius_mm', 1.0)),
     step=0.1,
     help="Overall stem diameter"
 )
@@ -115,7 +115,7 @@ stem_radius = st.sidebar.slider(
 xylem_diameter = st.sidebar.slider(
     "Xylem Vessel Diameter (μm)",
     min_value=5.0, max_value=200.0,
-    value=default_params.get('xylem_vessel_diameter_um', 20.0),
+    value=float(default_params.get('xylem_vessel_diameter_um', 20.0)),
     step=5.0,
     help="Width of water-conducting vessels"
 )
@@ -123,7 +123,7 @@ xylem_diameter = st.sidebar.slider(
 phloem_diameter = st.sidebar.slider(
     "Phloem Sieve Diameter (μm)",
     min_value=5.0, max_value=100.0,
-    value=default_params.get('phloem_sieve_diameter_um', 15.0),
+    value=float(default_params.get('phloem_sieve_diameter_um', 15.0)),
     step=2.0,
     help="Width of sugar-conducting tubes"
 )
@@ -153,7 +153,7 @@ st.sidebar.subheader("🔬 Physiology Parameters")
 xylem_pressure = st.sidebar.slider(
     "Xylem Pressure (kPa)",
     min_value=-2500, max_value=-50,
-    value=int(default_params.get('xylem_pressure_drop_kPa', -500)),
+    value=int(float(default_params.get('xylem_pressure_drop_kPa', -500))),
     step=50,
     help="Negative pressure pulling water upward"
 )
@@ -161,7 +161,7 @@ xylem_pressure = st.sidebar.slider(
 phloem_pressure = st.sidebar.slider(
     "Phloem Pressure (kPa)",
     min_value=200, max_value=2000,
-    value=int(default_params.get('phloem_pressure_kPa', 800)),
+    value=int(float(default_params.get('phloem_pressure_kPa', 800))),
     step=50,
     help="Positive pressure driving sugar flow"
 )
@@ -169,7 +169,7 @@ phloem_pressure = st.sidebar.slider(
 sucrose_conc = st.sidebar.slider(
     "Sucrose Concentration (mM)",
     min_value=100, max_value=1200,
-    value=int(default_params.get('sucrose_concentration_mM', 400)),
+    value=int(float(default_params.get('sucrose_concentration_mM', 400))),
     step=50,
     help="Sugar concentration in phloem"
 )
@@ -178,19 +178,19 @@ if complexity == 'advanced':
     viscosity = st.sidebar.slider(
         "Base Viscosity (mPa·s)",
         min_value=1.0, max_value=5.0,
-        value=default_params.get('viscosity_mPa_s', 1.5),
+        value=float(default_params.get('viscosity_mPa_s', 1.5)),
         step=0.1
     )
     
     membrane_perm = st.sidebar.number_input(
         "Membrane Permeability (m/s)",
         min_value=1e-9, max_value=1e-5,
-        value=default_params.get('membrane_permeability_m_s', 1e-7),
+        value=float(default_params.get('membrane_permeability_m_s', 1e-7)),
         format="%.2e"
     )
 else:
-    viscosity = default_params.get('viscosity_mPa_s', 1.5)
-    membrane_perm = default_params.get('membrane_permeability_m_s', 1e-7)
+    viscosity = float(default_params.get('viscosity_mPa_s', 1.5))
+    membrane_perm = float(default_params.get('membrane_permeability_m_s', 1e-7))
 
 # Molecule manager
 if complexity == 'advanced':

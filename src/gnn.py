@@ -12,6 +12,10 @@ try:
     TORCH_GEOMETRIC_AVAILABLE = True
 except ImportError:
     TORCH_GEOMETRIC_AVAILABLE = False
+    # Create dummy classes for when torch is not available
+    class nn:
+        class Module:
+            pass
     print("⚠️ PyTorch Geometric not available. GNN functionality disabled.")
 
 

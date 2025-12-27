@@ -7,30 +7,101 @@ PhytoFlow automatically detects and uses any available GPU to accelerate simulat
 **PhytoFlow will automatically detect and use whatever GPU you have installed - no configuration needed!**
 
 1. Install base PhytoFlow: `pip install -r requirements.txt`
-2. Install GPU library for your hardware (see below)
-3. Run PhytoFlow - it will automatically use your GPU
+2. **IMPORTANT**: Update pip first: `pip install --upgrade pip setuptools wheel`
+3. Install GPU library for your hardware (see below)
+4. Run PhytoFlow - it will automatically use your GPU
 
 When you launch PhytoFlow, you'll see a message like:
-- ✅ `Detected: NVIDIA GeForce RTX 4090 (CUDA)` 
-- ✅ `Detected: Apple Silicon (Metal GPU)`
-- ✅ `Detected: AMD Radeon RX 7900 XT (ROCm/HIP)`
-- ℹ️ `No GPU detected - using multi-threaded CPU with 16 cores`
+- ✅ `GPU Acceleration: Apple Silicon M4 Max (Metal GPU) + 14 CPU cores` 
+- ✅ `GPU Acceleration: NVIDIA GeForce RTX 4090 (CUDA) + 16 CPU cores`
+- ✅ `GPU Acceleration: AMD Radeon RX 7900 XT (ROCm/HIP) + 12 CPU cores`
+- ℹ️ `Multi-Core CPU: 16 cores (no GPU detected)`
+
+**🔥 Common Issues & Quick Fixes**:
+- ❌ `ERROR: Could not find a version that satisfies the requirement mlx`
+  - ✅ **Fix**: Run `pip install --upgrade pip setuptools wheel` first!
+  - ✅ **Fix**: Check Python version: `python --version` (need 3.10+)
+  - ✅ **Fix**: Use `python3 -m pip install mlx` instead of just `pip install mlx`
 
 ---
 
 ## 📦 Installation by Hardware
 
-### 🍎 Apple Silicon (M1/M2/M3/M4)
+### 🍎 Apple Silicon (M1/M2/M3/M4 Max/Ultra)
 
 **Best Performance**: Metal GPU acceleration via MLX
 
 ```bash
+# Update pip first (required!)
+pip install --upgrade pip setuptools wheel
+
+# Install MLX
 pip install mlx
 ```
 
-**Compatibility**: macOS 13.3+ with Apple Silicon
+**Compatibility**: 
+- macOS 13.5+ (Ventura or newer)
+- Apple Silicon (M1/M2/M3/M4 chips)
+- Python 3.10, 3.11, 3.12, or 3.13
 
 **Performance**: 5-10x faster than CPU for large simulations
+
+**Troubleshooting**:
+
+If you get `ERROR: Could not find a version that satisfies the requirement mlx`:
+
+1. **Check Python version** (must be 3.10+):
+   ```bash
+   python --version
+   # or
+   python3 --version
+   ```
+
+2. **Update pip/setuptools** (critical!):
+   ```bash
+   pip install --upgrade pip setuptools wheel
+   # or
+   python3 -m pip install --upgrade pip setuptools wheel
+   ```
+
+3. **Check you're on Apple Silicon**:
+   ```bash
+   uname -m  # Should show "arm64"
+   ```
+
+4. **Try with python3 explicitly**:
+   ```bash
+   python3 -m pip install mlx
+   ```
+
+5. **Create fresh virtual environment** (recommended):
+   ```bash
+   python3 -m venv phytoflow_env
+   source phytoflow_env/bin/activate
+   pip install --upgrade pip setuptools wheel
+   pip install mlx
+   pip install -r requirements.txt
+   ```
+
+6. **If using conda** (like "(GEMINI)" environment):
+   ```bash
+   # Conda doesn't have mlx in default channels
+   # Use pip within conda environment
+   conda activate GEMINI
+   pip install --upgrade pip setuptools wheel
+   pip install mlx
+   ```
+
+7. **Check internet/PyPI connection**:
+   ```bash
+   pip install --verbose mlx
+   ```
+
+**Verified Working Setups**:
+- ✅ M4 Max + macOS Sequoia 15.x + Python 3.12
+- ✅ M3 Pro + macOS Sonoma 14.x + Python 3.11
+- ✅ M2 + macOS Ventura 13.5+ + Python 3.10+
+- ✅ M1 + macOS Ventura 13.5+ + Python 3.10+
 
 ---
 
@@ -186,6 +257,31 @@ Simulation time for 100 nodes, 1000 time steps:
 
 ## 🔧 Troubleshooting
 
+### Python version issues
+
+**MLX requires Python 3.10+**, CuPy and other libraries have similar requirements.
+
+```bash
+# Check Python version
+python --version  # or python3 --version
+
+# If too old, install newer Python:
+# macOS: brew install python@3.12
+# Linux: sudo apt install python3.12
+# Windows: Download from python.org
+```
+
+### pip/setuptools outdated
+
+**Critical**: Many GPU libraries need recent pip/setuptools.
+
+```bash
+# Always run this first!
+pip install --upgrade pip setuptools wheel
+# or
+python3 -m pip install --upgrade pip setuptools wheel
+```
+
 ### "No GPU detected" but I have a GPU
 
 **Check 1**: Is the GPU library installed?
@@ -193,8 +289,8 @@ Simulation time for 100 nodes, 1000 time steps:
 # NVIDIA
 python -c "import cupy; print(cupy.cuda.runtime.getDeviceCount())"
 
-# Apple
-python -c "import mlx.core as mx; print('MLX available')"
+# Apple (try this first)
+python -c "import mlx.core as mx; print('MLX available:', mx.__version__)"
 
 # AMD
 python -c "import cupy; print('CuPy+ROCm available')"

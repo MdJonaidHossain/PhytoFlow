@@ -71,7 +71,7 @@ pip install --upgrade pip setuptools wheel
 # Apple Silicon (M1/M2/M3/M4):  pip install mlx
 # NVIDIA GPU:                   pip install cupy-cuda12x
 # AMD GPU:                      pip install cupy-rocm-5-0
-# Intel GPU:                    pip install dpnp dpctl
+# Intel GPU:                    pip install dpctl dpnp
 
 # Diagnose GPU setup (optional)
 python diagnose_gpu.py

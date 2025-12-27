@@ -199,8 +199,10 @@ def check_phytoflow():
     print_header("PhytoFlow GPU Detection")
     
     try:
-        # Add src to path
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+        # Add src to path (handle different execution contexts)
+        src_path = os.path.join(os.path.dirname(__file__), 'src')
+        if os.path.exists(src_path) and src_path not in sys.path:
+            sys.path.insert(0, src_path)
         
         from accelerators import get_accelerator
         

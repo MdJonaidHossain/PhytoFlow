@@ -98,6 +98,19 @@ if 'complexity_mode' not in st.session_state:
 st.markdown('<div class="main-header">🌿 PhytoFlow AI</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Biophysics Engine for Plant Vascular Transport</div>', unsafe_allow_html=True)
 
+# Show hardware acceleration status
+try:
+    from accelerators import get_accelerator
+    accel = get_accelerator()
+    hw_info = accel.get_info()
+    
+    if accel.device_type != "cpu":
+        st.success(f"🚀 GPU Acceleration: **{hw_info['device_name']}** + {hw_info['num_cpu_cores']} CPU cores")
+    else:
+        st.info(f"⚡ Multi-Core CPU: **{hw_info['num_cpu_cores']} cores** (Install GPU libraries for acceleration)")
+except:
+    pass  # Silently continue if accelerator not available
+
 # Sidebar
 st.sidebar.title("⚙️ Controls")
 

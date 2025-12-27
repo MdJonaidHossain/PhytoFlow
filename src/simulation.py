@@ -1,8 +1,39 @@
-"""Biophysics engine: Münch-Horwitz coupled solver with viscosity modeling."""
+"""Biophysics engine: Münch-Horwitz coupled solver with viscosity modeling.
+
+Now includes automatic GPU acceleration (Apple Metal, NVIDIA CUDA, AMD ROCm, Intel oneAPI)
+and multi-core CPU parallelization for faster simulations.
+"""
 
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
+
+# Import hardware acceleration (optional, graceful fallback to CPU)
+try:
+    from accelerators import get_accelerator, ParallelProcessor
+    _has_acceleration = True
+except ImportError:
+    _has_acceleration = False
+    # Create dummy implementations
+    class DummyAccelerator:
+        def __init__(self):
+            self.device_type = "cpu"
+            self.device_name = "CPU"
+            self.backend = np
+        def get_array_module(self):
+            return np
+        def to_device(self, arr):
+            return arr
+        def to_numpy(self, arr):
+            return np.asarray(arr)
+    
+    def get_accelerator():
+        return DummyAccelerator()
+    
+    class ParallelProcessor:
+        @staticmethod
+        def parallel_map(func, items, n_jobs=-1):
+            return [func(item) for item in items]
 
 
 @dataclass
@@ -104,24 +135,35 @@ class PhytoFlowSolver:
     Coupled 1D Münch-Horwitz solver for xylem (Navier-Stokes) and phloem (osmotic flow).
     
     Uses finite differences with adaptive time-stepping and relaxation for stability.
+    Now includes automatic GPU acceleration and multi-core CPU parallelization.
     """
     
-    def __init__(self, length_m: float = 0.1, n_nodes: int = 50):
+    def __init__(self, length_m: float = 0.1, n_nodes: int = 50, use_gpu: bool = True):
         """
         Initialize solver.
         
         Args:
             length_m: Length of stem segment in meters
             n_nodes: Number of spatial nodes
+            use_gpu: Whether to use GPU acceleration if available (default: True)
         """
         self.length_m = length_m
         self.n_nodes = n_nodes
         self.dx = length_m / (n_nodes - 1)
+        self.use_gpu = use_gpu
+        
+        # Initialize hardware acceleration
+        if _has_acceleration and use_gpu:
+            self.accelerator = get_accelerator()
+            self.xp = self.accelerator.get_array_module()
+        else:
+            self.accelerator = None
+            self.xp = np
         
         # Spatial grid
         self.x = np.linspace(0, length_m, n_nodes)
         
-        # State variables
+        # State variables (on appropriate device)
         self.xylem_pressure = np.zeros(n_nodes)
         self.phloem_pressure = np.zeros(n_nodes)
         self.concentration = np.zeros(n_nodes)
@@ -158,9 +200,9 @@ class PhytoFlowSolver:
         self.bc_phloem_outlet = phloem_outlet_kPa
         self.bc_source_concentration = source_concentration_mM
     
-    def solve_xylem_poiseuille(self, vessel_radius_um: float = 20.0) -> None:
+    def solve_xylem_poiseuille(self, vessel_radius_um: float = 20.0) -> List[str]:
         """
-        Solve xylem flow using Hagen-Poiseuille equation.
+        Solve xylem flow using Hagen-Poiseuille equation (GPU-accelerated).
         
         Q = (π r⁴ / 8μ) * (ΔP / Δx)
         """
@@ -170,14 +212,29 @@ class PhytoFlowSolver:
         self.xylem_pressure[0] = self.bc_xylem_inlet
         self.xylem_pressure[-1] = self.bc_xylem_outlet
         
-        # Compute flow rate at each segment
-        for i in range(self.n_nodes - 1):
-            dP = (self.xylem_pressure[i] - self.xylem_pressure[i+1]) * 1000  # Convert kPa to Pa
-            mu = self.viscosity[i] * 1e-3  # Convert mPa·s to Pa·s
-            
-            # Poiseuille flow
-            Q = (np.pi * radius_m**4 / (8 * mu)) * (dP / self.dx)
-            self.xylem_flow[i] = Q * 1e9  # Convert to nL/s
+        # Vectorized computation (GPU/multi-core accelerated)
+        xp = self.xp
+        
+        # Transfer to GPU if available
+        if self.accelerator and self.use_gpu:
+            pressure = self.accelerator.to_device(self.xylem_pressure)
+            viscosity = self.accelerator.to_device(self.viscosity)
+        else:
+            pressure = self.xylem_pressure
+            viscosity = self.viscosity
+        
+        # Vectorized pressure gradient computation
+        dP = (pressure[:-1] - pressure[1:]) * 1000  # Convert kPa to Pa
+        mu = viscosity[:-1] * 1e-3  # Convert mPa·s to Pa·s
+        
+        # Vectorized Poiseuille flow (all segments at once)
+        Q = (xp.pi if hasattr(xp, 'pi') else np.pi) * radius_m**4 / (8 * mu) * (dP / self.dx)
+        
+        # Transfer back from GPU if needed
+        if self.accelerator and self.use_gpu:
+            Q = self.accelerator.to_numpy(Q)
+        
+        self.xylem_flow[:-1] = Q * 1e9  # Convert to nL/s
         
         # Check for cavitation risk
         if np.any(self.xylem_pressure < -2500):

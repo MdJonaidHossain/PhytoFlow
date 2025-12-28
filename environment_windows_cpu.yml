@@ -1,0 +1,83 @@
+# PhytoFlow Conda Environment for Windows x86_64 CPU-only
+# Platform: Windows 10/11 x86_64
+# Python: 3.11
+# Features: CPU-only (no GPU), optimized with MKL, all features enabled
+
+name: phytoflow_windows_cpu
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.11
+  - pip>=23.0
+  
+  # Scientific computing with Intel MKL for optimized CPU performance
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - pandas>=2.0.0
+  - mkl
+  - mkl-service
+  
+  # Visualization
+  - streamlit>=1.28.0
+  - altair>=5.0.0
+  - plotly>=5.14.0
+  
+  # Geometry and 3D
+  - shapely>=2.0.0
+  - trimesh>=4.0.0
+  
+  # Optimization
+  - cma>=3.3.0
+  
+  # Testing
+  - pytest>=7.4.0
+  - pytest-cov>=4.1.0
+  
+  # Development tools
+  - black
+  - flake8
+  
+  # Install via pip (not available in conda or better from pip)
+  - pip:
+      # Image processing (pip version for Windows stability)
+      - opencv-python>=4.8.0
+      - scikit-image>=0.21.0
+      
+      # Additional visualization
+      - vega-datasets
+      
+      # Optional: Advanced ML (if using PINN/GNN features, CPU version)
+      # Uncomment if needed:
+      # - torch>=2.0.0+cpu --index-url https://download.pytorch.org/whl/cpu
+      # - deepxde>=1.10.0
+      # - torch-geometric>=2.4.0
+
+# Installation instructions:
+# 1. Save this file as environment_windows_cpu.yml
+# 2. Open Anaconda Prompt (or Miniconda Prompt)
+# 3. Create environment:
+#    conda env create -f environment_windows_cpu.yml
+# 4. Activate:
+#    conda activate phytoflow_windows_cpu
+# 5. Run app:
+#    streamlit run src/app.py
+
+# Performance notes:
+# - Automatically uses all CPU cores via MKL threading
+# - 3-4x faster than single-core CPU
+# - No GPU required - works on any Windows machine
+# - Great for laptops and systems without dedicated GPU
+
+# Note:
+# - Visual Studio C++ Build Tools may be required for some packages
+# - Download from: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+# - Select "Desktop development with C++" workload during installation
+
+# Requirements:
+# - Windows 10 or Windows 11 (64-bit)
+# - No GPU required
+# - Conda or Miniconda installed

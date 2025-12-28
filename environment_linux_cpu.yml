@@ -1,0 +1,77 @@
+# PhytoFlow Conda Environment for Linux x86_64 CPU-only
+# Platform: Linux x86_64 (AMD64)
+# Python: 3.11
+# Features: CPU-only (no GPU), optimized with OpenBLAS, all features enabled
+
+name: phytoflow_linux_cpu
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.11
+  - pip>=23.0
+  
+  # Scientific computing with OpenBLAS for optimized CPU performance
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - pandas>=2.0.0
+  - openblas
+  - libblas=*=*openblas
+  
+  # Visualization
+  - streamlit>=1.28.0
+  - altair>=5.0.0
+  - plotly>=5.14.0
+  
+  # Geometry and 3D
+  - shapely>=2.0.0
+  - trimesh>=4.0.0
+  
+  # Image processing (optional, for Digital Twin feature)
+  - opencv>=4.8.0
+  - scikit-image>=0.21.0
+  
+  # Optimization
+  - cma>=3.3.0
+  
+  # Testing
+  - pytest>=7.4.0
+  - pytest-cov>=4.1.0
+  
+  # Development tools
+  - black
+  - flake8
+  
+  # Install via pip (not available in conda or better from pip)
+  - pip:
+      # Additional visualization
+      - vega-datasets
+      
+      # Optional: Advanced ML (if using PINN/GNN features, CPU version)
+      # Uncomment if needed:
+      # - torch>=2.0.0+cpu  # PyTorch CPU version
+      # - deepxde>=1.10.0
+      # - torch-geometric>=2.4.0
+
+# Installation instructions:
+# 1. Save this file as environment_linux_cpu.yml
+# 2. Create environment:
+#    conda env create -f environment_linux_cpu.yml
+# 3. Activate:
+#    conda activate phytoflow_linux_cpu
+# 4. Run app:
+#    streamlit run src/app.py
+
+# Performance notes:
+# - Automatically uses all CPU cores via OpenBLAS threading
+# - 3-4x faster than single-core CPU
+# - No GPU required - works on any Linux machine
+# - Great for servers, VMs, and systems without GPU
+
+# Requirements:
+# - Linux x86_64 (any distribution: Ubuntu, Debian, RHEL, Fedora, Arch, etc.)
+# - No GPU required
+# - Conda or Miniconda installed

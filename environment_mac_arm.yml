@@ -1,0 +1,74 @@
+# PhytoFlow Conda Environment for macOS Apple Silicon (M1/M2/M3/M4 Max/Ultra)
+# Platform: macOS ARM64 (Apple Silicon)
+# Python: 3.12
+# Features: Full GPU acceleration with MLX, all features enabled
+
+name: phytoflow_mac_arm
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.12
+  - pip>=23.0
+  
+  # Scientific computing
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - pandas>=2.0.0
+  
+  # Visualization
+  - streamlit>=1.28.0
+  - altair>=5.0.0
+  - plotly>=5.14.0
+  
+  # Geometry and 3D
+  - shapely>=2.0.0
+  - trimesh>=4.0.0
+  
+  # Image processing (optional, for Digital Twin feature)
+  - opencv>=4.8.0
+  - scikit-image>=0.21.0
+  
+  # Optimization
+  - cma>=3.3.0
+  
+  # Testing
+  - pytest>=7.4.0
+  - pytest-cov>=4.1.0
+  
+  # Development tools
+  - black
+  - flake8
+  
+  # Install via pip (not available in conda or better from pip)
+  - pip:
+      # GPU acceleration - MLX (Apple Silicon ONLY)
+      - mlx>=0.20.0
+      
+      # Additional visualization
+      - vega-datasets
+      
+      # Optional: Advanced ML (if using PINN/GNN features)
+      # Uncomment if needed:
+      # - torch>=2.0.0
+      # - deepxde>=1.10.0
+      # - torch-geometric>=2.4.0
+
+# Installation instructions:
+# 1. Save this file as environment_mac_arm.yml
+# 2. Create environment:
+#    conda env create -f environment_mac_arm.yml
+# 3. Activate:
+#    conda activate phytoflow_mac_arm
+# 4. Verify GPU:
+#    python -c "import mlx.core as mx; print(f'MLX version: {mx.__version__}')"
+# 5. Run app:
+#    streamlit run src/app.py
+
+# Requirements:
+# - macOS 13.5 or later
+# - Apple Silicon (M1/M2/M3/M4)
+# - Conda or Miniconda installed

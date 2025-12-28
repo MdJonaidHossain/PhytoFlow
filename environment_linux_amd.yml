@@ -50,7 +50,8 @@ dependencies:
       - cupy-rocm-5-0  # For ROCm 5.x (most common)
       # - cupy-rocm-6-0  # For ROCm 6.x - uncomment if needed
       
-      # Additional visualization
+      # Additional visualization and SVG export
+      - svgwrite>=1.4.3
       - vega-datasets
       
       # Optional: Advanced ML (if using PINN/GNN features with GPU)

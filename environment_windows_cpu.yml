@@ -47,7 +47,8 @@ dependencies:
       - opencv-python>=4.8.0
       - scikit-image>=0.21.0
       
-      # Additional visualization
+      # Additional visualization and SVG export
+      - svgwrite>=1.4.3
       - vega-datasets
       
       # Optional: Advanced ML (if using PINN/GNN features, CPU version)

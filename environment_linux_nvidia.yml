@@ -55,7 +55,8 @@ dependencies:
       - cupy-cuda12x  # For CUDA 12.x (RTX 40 series, A100, H100)
       # - cupy-cuda11x  # For CUDA 11.x (RTX 30 series) - uncomment if needed
       
-      # Additional visualization
+      # Additional visualization and SVG export
+      - svgwrite>=1.4.3
       - vega-datasets
       
       # Optional: Advanced ML (if using PINN/GNN features with GPU)

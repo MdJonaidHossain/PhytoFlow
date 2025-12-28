@@ -59,6 +59,9 @@ dependencies:
       - opencv-python>=4.8.0
       - scikit-image>=0.21.0
       
+      # SVG export
+      - svgwrite>=1.4.3
+      
       # Additional visualization
       - vega-datasets
       

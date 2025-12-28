@@ -1,0 +1,90 @@
+{
+  "arabidopsis": {
+    "name": "Arabidopsis thaliana",
+    "description": "Model plant, herbaceous dicot",
+    "geometry": {
+      "stem_radius_mm": {"default": 0.5, "min": 0.3, "max": 0.8, "unit": "mm"},
+      "xylem_vessel_diameter_um": {"default": 20, "min": 10, "max": 40, "unit": "μm"},
+      "phloem_sieve_diameter_um": {"default": 15, "min": 8, "max": 25, "unit": "μm"},
+      "xylem_vessel_density": {"default": 50, "min": 20, "max": 100, "unit": "vessels/mm²"},
+      "phloem_density": {"default": 30, "min": 10, "max": 60, "unit": "elements/mm²"},
+      "membrane_thickness_nm": {"default": 10, "min": 5, "max": 20, "unit": "nm"}
+    },
+    "physiology": {
+      "xylem_pressure_drop_kPa": {"default": -500, "min": -1500, "max": -100, "unit": "kPa"},
+      "phloem_pressure_kPa": {"default": 800, "min": 400, "max": 1200, "unit": "kPa"},
+      "phloem_osmotic_kPa": {"default": 1000, "min": 600, "max": 1500, "unit": "kPa"},
+      "sucrose_concentration_mM": {"default": 400, "min": 200, "max": 800, "unit": "mM"},
+      "amino_acids_mM": {"default": 50, "min": 10, "max": 100, "unit": "mM"},
+      "viscosity_mPa_s": {"default": 1.5, "min": 1.0, "max": 3.0, "unit": "mPa·s"},
+      "membrane_permeability_m_s": {"default": 1e-7, "min": 1e-8, "max": 1e-6, "unit": "m/s"}
+    },
+    "references": ["Nieminen et al. 2004 Plant J", "Lucas et al. 2013 Front Plant Sci"]
+  },
+  "maize": {
+    "name": "Zea mays",
+    "description": "C4 monocot, large vessels",
+    "geometry": {
+      "stem_radius_mm": {"default": 5.0, "min": 3.0, "max": 8.0, "unit": "mm"},
+      "xylem_vessel_diameter_um": {"default": 80, "min": 40, "max": 150, "unit": "μm"},
+      "phloem_sieve_diameter_um": {"default": 25, "min": 15, "max": 40, "unit": "μm"},
+      "xylem_vessel_density": {"default": 30, "min": 15, "max": 60, "unit": "vessels/mm²"},
+      "phloem_density": {"default": 40, "min": 20, "max": 80, "unit": "elements/mm²"},
+      "membrane_thickness_nm": {"default": 12, "min": 8, "max": 20, "unit": "nm"}
+    },
+    "physiology": {
+      "xylem_pressure_drop_kPa": {"default": -800, "min": -2000, "max": -200, "unit": "kPa"},
+      "phloem_pressure_kPa": {"default": 1000, "min": 600, "max": 1500, "unit": "kPa"},
+      "phloem_osmotic_kPa": {"default": 1200, "min": 800, "max": 1800, "unit": "kPa"},
+      "sucrose_concentration_mM": {"default": 500, "min": 300, "max": 900, "unit": "mM"},
+      "amino_acids_mM": {"default": 60, "min": 20, "max": 120, "unit": "mM"},
+      "viscosity_mPa_s": {"default": 1.8, "min": 1.2, "max": 3.5, "unit": "mPa·s"},
+      "membrane_permeability_m_s": {"default": 1.5e-7, "min": 5e-8, "max": 5e-6, "unit": "m/s"}
+    },
+    "references": ["Shane et al. 2000 New Phytol", "Heinen et al. 2009 Plant Cell Environ"]
+  },
+  "wheat": {
+    "name": "Triticum aestivum",
+    "description": "C3 cereal, moderate vessels",
+    "geometry": {
+      "stem_radius_mm": {"default": 2.0, "min": 1.2, "max": 3.5, "unit": "mm"},
+      "xylem_vessel_diameter_um": {"default": 50, "min": 25, "max": 90, "unit": "μm"},
+      "phloem_sieve_diameter_um": {"default": 20, "min": 12, "max": 35, "unit": "μm"},
+      "xylem_vessel_density": {"default": 40, "min": 20, "max": 70, "unit": "vessels/mm²"},
+      "phloem_density": {"default": 35, "min": 15, "max": 70, "unit": "elements/mm²"},
+      "membrane_thickness_nm": {"default": 11, "min": 6, "max": 18, "unit": "nm"}
+    },
+    "physiology": {
+      "xylem_pressure_drop_kPa": {"default": -600, "min": -1800, "max": -150, "unit": "kPa"},
+      "phloem_pressure_kPa": {"default": 900, "min": 500, "max": 1400, "unit": "kPa"},
+      "phloem_osmotic_kPa": {"default": 1100, "min": 700, "max": 1700, "unit": "kPa"},
+      "sucrose_concentration_mM": {"default": 450, "min": 250, "max": 850, "unit": "mM"},
+      "amino_acids_mM": {"default": 55, "min": 15, "max": 110, "unit": "mM"},
+      "viscosity_mPa_s": {"default": 1.6, "min": 1.1, "max": 3.2, "unit": "mPa·s"},
+      "membrane_permeability_m_s": {"default": 1.2e-7, "min": 3e-8, "max": 3e-6, "unit": "m/s"}
+    },
+    "references": ["Wardlaw 1990 Bot Rev", "Patrick & Offler 2001 Aust J Plant Physiol"]
+  },
+  "rice": {
+    "name": "Oryza sativa",
+    "description": "C3 wetland cereal",
+    "geometry": {
+      "stem_radius_mm": {"default": 1.5, "min": 1.0, "max": 2.5, "unit": "mm"},
+      "xylem_vessel_diameter_um": {"default": 40, "min": 20, "max": 70, "unit": "μm"},
+      "phloem_sieve_diameter_um": {"default": 18, "min": 10, "max": 30, "unit": "μm"},
+      "xylem_vessel_density": {"default": 45, "min": 25, "max": 80, "unit": "vessels/mm²"},
+      "phloem_density": {"default": 35, "min": 18, "max": 65, "unit": "elements/mm²"},
+      "membrane_thickness_nm": {"default": 10, "min": 6, "max": 16, "unit": "nm"}
+    },
+    "physiology": {
+      "xylem_pressure_drop_kPa": {"default": -400, "min": -1200, "max": -100, "unit": "kPa"},
+      "phloem_pressure_kPa": {"default": 850, "min": 450, "max": 1300, "unit": "kPa"},
+      "phloem_osmotic_kPa": {"default": 1050, "min": 650, "max": 1600, "unit": "kPa"},
+      "sucrose_concentration_mM": {"default": 420, "min": 220, "max": 820, "unit": "mM"},
+      "amino_acids_mM": {"default": 52, "min": 12, "max": 105, "unit": "mM"},
+      "viscosity_mPa_s": {"default": 1.55, "min": 1.05, "max": 3.1, "unit": "mPa·s"},
+      "membrane_permeability_m_s": {"default": 1.1e-7, "min": 2e-8, "max": 2e-6, "unit": "m/s"}
+    },
+    "references": ["Hoshikawa 1989 Rice Anatomy", "Fukumorita & Chino 1982 Plant Cell Physiol"]
+  }
+}

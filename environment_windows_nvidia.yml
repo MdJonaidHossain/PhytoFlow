@@ -1,0 +1,99 @@
+# PhytoFlow Conda Environment for Windows x86_64 with NVIDIA GPU
+# Platform: Windows 10/11 x86_64
+# Python: 3.11
+# Features: NVIDIA CUDA GPU acceleration, all features enabled
+
+name: phytoflow_windows_nvidia
+
+channels:
+  - conda-forge
+  - nvidia
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.11
+  - pip>=23.0
+  
+  # CUDA toolkit (for NVIDIA GPU)
+  - cudatoolkit=12.2
+  - cudnn>=8.9.0
+  
+  # Scientific computing
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - pandas>=2.0.0
+  
+  # Visualization
+  - streamlit>=1.28.0
+  - altair>=5.0.0
+  - plotly>=5.14.0
+  
+  # Geometry and 3D
+  - shapely>=2.0.0
+  - trimesh>=4.0.0
+  
+  # Image processing (optional, for Digital Twin feature)
+  # Use opencv-python (headless) for Windows stability
+  - pip
+  
+  # Optimization
+  - cma>=3.3.0
+  
+  # Testing
+  - pytest>=7.4.0
+  - pytest-cov>=4.1.0
+  
+  # Development tools
+  - black
+  - flake8
+  
+  # Install via pip (not available in conda or better from pip)
+  - pip:
+      # GPU acceleration - CuPy for NVIDIA CUDA
+      # Choose based on your CUDA version:
+      - cupy-cuda12x  # For CUDA 12.x (RTX 40 series, A100, H100)
+      # - cupy-cuda11x  # For CUDA 11.x (RTX 30 series) - uncomment if needed
+      
+      # Image processing (pip version for Windows)
+      - opencv-python>=4.8.0
+      - scikit-image>=0.21.0
+      
+      # SVG export
+      - svgwrite>=1.4.3
+      
+      # Additional visualization
+      - vega-datasets
+      
+      # Optional: Advanced ML (if using PINN/GNN features with GPU)
+      # Uncomment if needed:
+      # - torch>=2.0.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+      # - deepxde>=1.10.0
+      # - torch-geometric>=2.4.0
+
+# Installation instructions:
+# 1. Ensure NVIDIA drivers are installed:
+#    - Open NVIDIA Control Panel or run: nvidia-smi in PowerShell
+#    - Driver version 525+ recommended for CUDA 12.x
+# 2. Save this file as environment_windows_nvidia.yml
+# 3. Open Anaconda Prompt (or Miniconda Prompt)
+# 4. Create environment:
+#    conda env create -f environment_windows_nvidia.yml
+# 5. Activate:
+#    conda activate phytoflow_windows_nvidia
+# 6. Verify GPU:
+#    python -c "import cupy; print(f'CuPy with CUDA {cupy.cuda.runtime.runtimeGetVersion()}')"
+# 7. Run app:
+#    streamlit run src/app.py
+
+# Note:
+# - For CUDA 11.x, replace cupy-cuda12x with cupy-cuda11x in pip section
+# - Check your CUDA version with: nvidia-smi (look for CUDA Version)
+# - Visual Studio C++ Build Tools may be required for some packages
+# - Download from: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+# Requirements:
+# - Windows 10 or Windows 11 (64-bit)
+# - NVIDIA GPU (GeForce, Quadro, Tesla, A-series)
+# - NVIDIA drivers installed
+# - Conda or Miniconda installed

@@ -1,0 +1,78 @@
+# PhytoFlow Conda Environment for macOS Intel (x86_64)
+# Platform: macOS x86_64 (Intel processors)
+# Python: 3.12
+# Features: CPU-only (no GPU), all other features enabled
+
+name: phytoflow_mac_intel
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.12
+  - pip>=23.0
+  
+  # Scientific computing with MKL for optimized CPU performance
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - pandas>=2.0.0
+  - mkl
+  - mkl-service
+  
+  # Visualization
+  - streamlit>=1.28.0
+  - altair>=5.0.0
+  - plotly>=5.14.0
+  
+  # Geometry and 3D
+  - shapely>=2.0.0
+  - trimesh>=4.0.0
+  
+  # Image processing (optional, for Digital Twin feature)
+  - opencv>=4.8.0
+  - scikit-image>=0.21.0
+  
+  # Optimization
+  - cma>=3.3.0
+  
+  # Testing
+  - pytest>=7.4.0
+  - pytest-cov>=4.1.0
+  
+  # Development tools
+  - black
+  - flake8
+  
+  # Install via pip (not available in conda or better from pip)
+  - pip:
+      # Additional visualization and SVG export
+      - svgwrite>=1.4.3
+      - vega-datasets
+      
+      # Optional: Advanced ML (if using PINN/GNN features)
+      # Uncomment if needed:
+      # - torch>=2.0.0
+      # - deepxde>=1.10.0
+      # - torch-geometric>=2.4.0
+
+# Installation instructions:
+# 1. Save this file as environment_mac_intel.yml
+# 2. Create environment:
+#    conda env create -f environment_mac_intel.yml
+# 3. Activate:
+#    conda activate phytoflow_mac_intel
+# 4. Run app:
+#    streamlit run src/app.py
+
+# Note:
+# - MLX is NOT available on Intel Macs
+# - App will use multi-core CPU (3-4x faster than single core)
+# - If you want GPU, you'll need an external NVIDIA eGPU with CUDA support
+#   (rare and complex setup, not recommended)
+
+# Requirements:
+# - macOS 10.15 or later
+# - Intel processor
+# - Conda or Miniconda installed

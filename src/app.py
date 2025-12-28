@@ -261,8 +261,8 @@ if complexity == 'advanced':
 st.sidebar.markdown("---")
 st.sidebar.subheader("🚀 Actions")
 
-generate_btn = st.sidebar.button("🌿 Generate Stem Model", use_container_width=True)
-simulate_btn = st.sidebar.button("▶️ Run Simulation", use_container_width=True)
+generate_btn = st.sidebar.button("🌿 Generate Stem Model", width="stretch")
+simulate_btn = st.sidebar.button("▶️ Run Simulation", width="stretch")
 
 # Main content area - Tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
@@ -306,7 +306,7 @@ with tab1:
             
             # Create interactive Altair chart
             chart = PhytoFlowVisualizer.plot_cross_section(geom_data)
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, width="stretch")
             
             # Printability check
             is_printable, print_warnings = geometry.check_printability(min_feature_size_mm=0.1)
@@ -425,22 +425,22 @@ with tab2:
         # Pressure plot
         st.subheader("Pressure Distribution")
         pressure_chart = PhytoFlowVisualizer.plot_simulation_results(results, 'pressure')
-        st.altair_chart(pressure_chart, use_container_width=True)
+        st.altair_chart(pressure_chart, width="stretch")
         
         # Concentration plot
         st.subheader("Sugar Concentration")
         conc_chart = PhytoFlowVisualizer.plot_simulation_results(results, 'concentration')
-        st.altair_chart(conc_chart, use_container_width=True)
+        st.altair_chart(conc_chart, width="stretch")
         
         # Viscosity plot
         st.subheader("Viscosity (Concentration-Dependent)")
         visc_chart = PhytoFlowVisualizer.plot_simulation_results(results, 'viscosity')
-        st.altair_chart(visc_chart, use_container_width=True)
+        st.altair_chart(visc_chart, width="stretch")
         
         # Flow rates
         st.subheader("Flow Rates")
         flow_chart = PhytoFlowVisualizer.plot_flow_rates(results)
-        st.altair_chart(flow_chart, use_container_width=True)
+        st.altair_chart(flow_chart, width="stretch")
         
         # Summary
         st.markdown("---")
@@ -501,7 +501,7 @@ with tab3:
             }[x]
         )
         
-        optimize_btn = st.button("🎯 Run Optimization", use_container_width=True)
+        optimize_btn = st.button("🎯 Run Optimization", width="stretch")
     
     with col2:
         st.markdown("**Parameters to Optimize:**")
@@ -571,7 +571,7 @@ with tab3:
                     'Optimized': [result['parameters'][p] for p in param_names],
                     'Change': [result['parameters'][p] - base_params[p] for p in param_names]
                 })
-                st.dataframe(comp_df, use_container_width=True)
+                st.dataframe(comp_df, width="stretch")
                 
                 st.metric("Optimization Score", f"{result['score']:.2f}", 
                          help="Lower is better")
@@ -672,7 +672,7 @@ with tab4:
             # Visualize detected geometry
             st.subheader("Detected Geometry")
             chart = PhytoFlowVisualizer.plot_cross_section(geom_data)
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, width="stretch")
             
             # Save to session state
             if st.button("✅ Use This Geometry"):

@@ -198,7 +198,7 @@ with tab1:
             PhytoFlowVisualizer = modules['PhytoFlowVisualizer']
             viz = PhytoFlowVisualizer()
             chart = viz.plot_cross_section_altair(geom)
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, width="stretch")
             
             st.success(f"✅ Generated {n_bundles} vascular bundles")
     
@@ -208,7 +208,7 @@ with tab1:
         PhytoFlowVisualizer = modules['PhytoFlowVisualizer']
         viz = PhytoFlowVisualizer()
         chart = viz.plot_cross_section_altair(st.session_state.geometry)
-        st.altair_chart(chart, use_container_width=True)
+        st.altair_chart(chart, width="stretch")
 
 with tab2:
     st.subheader("Simulation Results")
@@ -266,11 +266,11 @@ with tab2:
                 
                 st.markdown("### Pressure Distribution")
                 pressure_chart = viz.plot_simulation_results_altair(results, 'pressure')
-                st.altair_chart(pressure_chart, use_container_width=True)
+                st.altair_chart(pressure_chart, width="stretch")
                 
                 st.markdown("### Concentration Profile")
                 conc_chart = viz.plot_simulation_results_altair(results, 'concentration')
-                st.altair_chart(conc_chart, use_container_width=True)
+                st.altair_chart(conc_chart, width="stretch")
                 
                 st.success("✅ Simulation complete!")
         
@@ -283,11 +283,11 @@ with tab2:
             
             st.markdown("### Pressure Distribution")
             pressure_chart = viz.plot_simulation_results_altair(results, 'pressure')
-            st.altair_chart(pressure_chart, use_container_width=True)
+            st.altair_chart(pressure_chart, width="stretch")
             
             st.markdown("### Concentration Profile")
             conc_chart = viz.plot_simulation_results_altair(results, 'concentration')
-            st.altair_chart(conc_chart, use_container_width=True)
+            st.altair_chart(conc_chart, width="stretch")
 
 with tab3:
     st.subheader("Design Optimization")

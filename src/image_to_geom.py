@@ -1,12 +1,25 @@
 """Image-to-geometry pipeline for creating digital twins from microscopy."""
 
-import cv2
 import numpy as np
-from skimage import filters, measure, morphology, segmentation
-from skimage.feature import peak_local_max
-from scipy import ndimage as ndi
 from typing import Tuple, Dict, List
 import warnings
+
+# Lazy imports for heavy dependencies
+def _import_cv2():
+    """Lazy import opencv (only when image processing needed)."""
+    import cv2
+    return cv2
+
+def _import_skimage():
+    """Lazy import scikit-image (only when image processing needed)."""
+    from skimage import filters, measure, morphology, segmentation
+    from skimage.feature import peak_local_max
+    return filters, measure, morphology, segmentation, peak_local_max
+
+def _import_scipy_ndi():
+    """Lazy import scipy.ndimage (only when image processing needed)."""
+    from scipy import ndimage as ndi
+    return ndi
 
 
 class ImageToGeometry:
@@ -29,6 +42,7 @@ class ImageToGeometry:
         Returns:
             Grayscale image array
         """
+        cv2 = _import_cv2()
         img = cv2.imread(image_path)
         if img is None:
             raise ValueError(f"Could not load image: {image_path}")
@@ -56,6 +70,7 @@ class ImageToGeometry:
         Returns:
             Preprocessed image
         """
+        cv2 = _import_cv2()
         # Gaussian blur to reduce noise
         if blur_sigma > 0:
             image = cv2.GaussianBlur(image, (0, 0), blur_sigma)
@@ -82,6 +97,8 @@ class ImageToGeometry:
         Returns:
             Binary mask
         """
+        filters, _, _, _, _ = _import_skimage()
+        
         if method == 'otsu':
             threshold = filters.threshold_otsu(image)
             binary = image > threshold
@@ -116,6 +133,9 @@ class ImageToGeometry:
         Returns:
             Labeled segmentation mask
         """
+        filters, measure, _, segmentation, peak_local_max = _import_skimage()
+        ndi = _import_scipy_ndi()
+        
         # Apply thresholding
         threshold = filters.threshold_otsu(image)
         binary = image > threshold
@@ -150,6 +170,8 @@ class ImageToGeometry:
         Returns:
             Cleaned binary mask
         """
+        _, measure, morphology, _, _ = _import_skimage()
+        
         # Remove small objects
         cleaned = morphology.remove_small_objects(binary, min_size=min_size)
         
@@ -184,6 +206,8 @@ class ImageToGeometry:
         Returns:
             List of bundle dictionaries
         """
+        _, measure, _, _, _ = _import_skimage()
+        
         if is_labeled:
             labeled = binary_or_labeled
         else:
